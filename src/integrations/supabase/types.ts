@@ -14,16 +14,327 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity_log: {
+        Row: {
+          action: string
+          created_at: string
+          details: string | null
+          id: string
+          target_id: string | null
+          user_name: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: string | null
+          id?: string
+          target_id?: string | null
+          user_name: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: string | null
+          id?: string
+          target_id?: string | null
+          user_name?: string
+        }
+        Relationships: []
+      }
+      app_settings: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string
+          value: Json | null
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string
+          value?: Json | null
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: Json | null
+        }
+        Relationships: []
+      }
+      joinings: {
+        Row: {
+          address: string | null
+          bio_id: string | null
+          college: string | null
+          created_at: string
+          date: string | null
+          department: string | null
+          emp_id: string | null
+          id: string
+          job_type: string | null
+          joining_status: string | null
+          name: string
+          onb_complete: boolean | null
+          onboarding: Json | null
+          position: string | null
+          qualification: string | null
+          remarks: string | null
+          updated_at: string
+          vacancy_id: string | null
+        }
+        Insert: {
+          address?: string | null
+          bio_id?: string | null
+          college?: string | null
+          created_at?: string
+          date?: string | null
+          department?: string | null
+          emp_id?: string | null
+          id?: string
+          job_type?: string | null
+          joining_status?: string | null
+          name: string
+          onb_complete?: boolean | null
+          onboarding?: Json | null
+          position?: string | null
+          qualification?: string | null
+          remarks?: string | null
+          updated_at?: string
+          vacancy_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          bio_id?: string | null
+          college?: string | null
+          created_at?: string
+          date?: string | null
+          department?: string | null
+          emp_id?: string | null
+          id?: string
+          job_type?: string | null
+          joining_status?: string | null
+          name?: string
+          onb_complete?: boolean | null
+          onboarding?: Json | null
+          position?: string | null
+          qualification?: string | null
+          remarks?: string | null
+          updated_at?: string
+          vacancy_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          name: string
+          pin: string
+          short_name: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          pin?: string
+          short_name?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          pin?: string
+          short_name?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      requisitions: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          block: string | null
+          count: number
+          created_at: string
+          department: string
+          hod_name: string
+          id: string
+          job_type: string | null
+          justification: string | null
+          position: string
+          req_id: string
+          status: string
+          sub_category: string | null
+          vacancy_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          block?: string | null
+          count?: number
+          created_at?: string
+          department: string
+          hod_name: string
+          id?: string
+          job_type?: string | null
+          justification?: string | null
+          position: string
+          req_id: string
+          status?: string
+          sub_category?: string | null
+          vacancy_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          block?: string | null
+          count?: number
+          created_at?: string
+          department?: string
+          hod_name?: string
+          id?: string
+          job_type?: string | null
+          justification?: string | null
+          position?: string
+          req_id?: string
+          status?: string
+          sub_category?: string | null
+          vacancy_id?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vacancies: {
+        Row: {
+          ad_date: string | null
+          ad_platform: string | null
+          applied: number | null
+          block: string | null
+          created_at: string
+          department: string
+          filled_count: number
+          grade: string | null
+          id: string
+          interviewed: number | null
+          job_type: string
+          location: string | null
+          offer_accepted: number | null
+          offer_declined: number | null
+          offer_made: number | null
+          position: string
+          remarks: string | null
+          requestor: string | null
+          required_count: number
+          selected: number | null
+          shortlisted: number | null
+          source: string | null
+          status: string
+          sub_category: string
+          updated_at: string | null
+          updated_by: string | null
+          vacancy_id: string
+        }
+        Insert: {
+          ad_date?: string | null
+          ad_platform?: string | null
+          applied?: number | null
+          block?: string | null
+          created_at?: string
+          department: string
+          filled_count?: number
+          grade?: string | null
+          id?: string
+          interviewed?: number | null
+          job_type?: string
+          location?: string | null
+          offer_accepted?: number | null
+          offer_declined?: number | null
+          offer_made?: number | null
+          position: string
+          remarks?: string | null
+          requestor?: string | null
+          required_count?: number
+          selected?: number | null
+          shortlisted?: number | null
+          source?: string | null
+          status?: string
+          sub_category?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          vacancy_id: string
+        }
+        Update: {
+          ad_date?: string | null
+          ad_platform?: string | null
+          applied?: number | null
+          block?: string | null
+          created_at?: string
+          department?: string
+          filled_count?: number
+          grade?: string | null
+          id?: string
+          interviewed?: number | null
+          job_type?: string
+          location?: string | null
+          offer_accepted?: number | null
+          offer_declined?: number | null
+          offer_made?: number | null
+          position?: string
+          remarks?: string | null
+          requestor?: string | null
+          required_count?: number
+          selected?: number | null
+          shortlisted?: number | null
+          source?: string | null
+          status?: string
+          sub_category?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          vacancy_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "hr_team" | "view_only"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +461,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "hr_team", "view_only"],
+    },
   },
 } as const
