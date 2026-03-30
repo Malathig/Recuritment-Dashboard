@@ -1,7 +1,11 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
-export default function AppHeader() {
+interface AppHeaderProps {
+  onReport?: () => void;
+}
+
+export default function AppHeader({ onReport }: AppHeaderProps) {
   const { profile, userRole, signOut } = useAuth();
 
   return (
@@ -16,6 +20,11 @@ export default function AppHeader() {
           <span>{profile?.name || 'User'}</span>
           <span className="text-[10px] bg-white/20 rounded-full px-2 py-0.5">{userRole?.replace('_', ' ') || 'User'}</span>
         </div>
+        {onReport && (
+          <button onClick={onReport} className="px-3 py-1.5 text-xs font-semibold border border-white/30 rounded-md bg-white/15 hover:bg-white/25 transition">
+            📊 Reports
+          </button>
+        )}
         <button onClick={signOut} className="px-3 py-1.5 text-xs font-semibold border border-white/30 rounded-md bg-white/15 hover:bg-white/25 transition">
           Logout
         </button>
