@@ -93,9 +93,13 @@ export default function VacancyModal({ open, onClose, onSave, vacancy, existingI
             <input value={form.requestor} onChange={e => setForm(f => ({ ...f, requestor: e.target.value }))}
               className="w-full border border-input rounded-md px-2 py-1.5 text-sm outline-none focus:border-primary bg-card" />
           </Field>
-          <Field label="Block" full>
+          <Field label="Block">
             <input value={form.block} onChange={e => setForm(f => ({ ...f, block: e.target.value }))}
               className="w-full border border-input rounded-md px-2 py-1.5 text-sm outline-none focus:border-primary bg-card" placeholder="e.g. Block A" />
+          </Field>
+          <Field label="Location">
+            <input value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
+              className="w-full border border-input rounded-md px-2 py-1.5 text-sm outline-none focus:border-primary bg-card" placeholder="e.g. Chennai Campus" />
           </Field>
           <Field label="Position">
             <input value={form.position} onChange={e => setForm(f => ({ ...f, position: e.target.value }))}
