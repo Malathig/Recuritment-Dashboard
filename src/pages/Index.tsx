@@ -6,26 +6,30 @@ import AppHeader from '@/components/AppHeader';
 import StatsCards from '@/components/StatsCards';
 import CategoryBar from '@/components/CategoryBar';
 import TypeToggle from '@/components/TypeToggle';
+import GradeFilter from '@/components/GradeFilter';
 import VacancyList from '@/components/VacancyList';
 import VacancyModal from '@/components/VacancyModal';
 import JoinModal from '@/components/JoinModal';
 import ResignModal from '@/components/ResignModal';
 import PipelineModal from '@/components/PipelineModal';
+import ReportModal from '@/components/ReportModal';
 import DashboardView from '@/components/DashboardView';
 import JoiningTracker from '@/components/JoiningTracker';
 import HODRequests from '@/components/HODRequests';
 import PipelineView from '@/components/PipelineView';
 import ActivityLogView from '@/components/ActivityLogView';
 import DepartmentView from '@/components/DepartmentView';
+import OnboardingView from '@/components/OnboardingView';
+import ExcelImportExport from '@/components/ExcelImportExport';
 import {
   fetchVacancies, createVacancy, updateVacancy, deleteVacancy,
   fetchJoinings, createJoining,
   fetchRequisitions, createRequisition, updateRequisition,
   fetchActivityLog, addActivityLog, generateVacancyId,
-  type Vacancy, type Requisition
+  type Vacancy, type Requisition, type VacancyInsert
 } from '@/lib/api';
 
-type ViewType = 'dash' | 'list' | 'dept' | 'log' | 'join' | 'req' | 'pipe';
+type ViewType = 'dash' | 'list' | 'dept' | 'log' | 'join' | 'req' | 'pipe' | 'onb';
 
 export default function Index() {
   const { profile, userRole } = useAuth();
@@ -34,6 +38,7 @@ export default function Index() {
   const [view, setView] = useState<ViewType>('list');
   const [activeCategory, setActiveCategory] = useState('ALL');
   const [activeType, setActiveType] = useState('ALL');
+  const [activeGrade, setActiveGrade] = useState('ALL');
 
   // Modals
   const [vacancyModal, setVacancyModal] = useState(false);
@@ -44,6 +49,7 @@ export default function Index() {
   const [resignVacancy, setResignVacancy] = useState<Vacancy | null>(null);
   const [pipeModal, setPipeModal] = useState(false);
   const [pipeVacancy, setPipeVacancy] = useState<Vacancy | null>(null);
+  const [reportModal, setReportModal] = useState(false);
 
   // Queries
   const { data: vacancies = [] } = useQuery({ queryKey: ['vacancies'], queryFn: fetchVacancies });
@@ -87,6 +93,19 @@ export default function Index() {
   const updateReqMut = useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) => updateRequisition(id, data),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['requisitions'] }); },
+  });
+
+  // Bulk import
+  const bulkImportMut = useMutation({
+    mutationFn: async (rows: VacancyInsert[]) => {
+      for (const row of rows) {
+        await createVacancy(row);
+      }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['vacancies'] });
+      toast.success('Import complete!');
+    },
   });
 
   // Handlers
@@ -165,6 +184,11 @@ export default function Index() {
   const existingIds = vacancies.map(v => v.vacancy_id);
   const isAdmin = userRole === 'admin';
 
+  // Filter vacancies by grade when TS is selected
+  const filteredVacancies = activeGrade !== 'ALL' && activeCategory === 'TS'
+    ? vacancies.filter(v => (v.grade || '').toLowerCase().includes(activeGrade.toLowerCase()))
+    : vacancies;
+
   const views: { key: ViewType; label: string; show?: boolean }[] = [
     { key: 'dash', label: 'Director Dashboard' },
     { key: 'list', label: 'Vacancy List' },
@@ -172,14 +196,16 @@ export default function Index() {
     { key: 'join', label: 'Joining Tracker' },
     { key: 'req', label: 'HOD Requests' },
     { key: 'pipe', label: 'Pipeline' },
+    { key: 'onb', label: 'Onboarding' },
     { key: 'log', label: 'Activity Log', show: isAdmin },
   ];
 
   return (
     <div className="min-h-screen bg-background">
-      <AppHeader />
+      <AppHeader onReport={() => setReportModal(true)} />
       <StatsCards vacancies={vacancies} />
-      <CategoryBar activeCategory={activeCategory} onCategoryChange={setActiveCategory} vacancies={vacancies} />
+      <CategoryBar activeCategory={activeCategory} onCategoryChange={(cat) => { setActiveCategory(cat); if (cat !== 'TS') setActiveGrade('ALL'); }} vacancies={vacancies} />
+      <GradeFilter activeGrade={activeGrade} onGradeChange={setActiveGrade} show={activeCategory === 'TS'} />
       <TypeToggle activeType={activeType} onTypeChange={setActiveType} vacancies={vacancies} />
 
       {/* View Tabs */}
@@ -196,7 +222,8 @@ export default function Index() {
         {view === 'dash' && <DashboardView vacancies={vacancies} />}
         {view === 'list' && (
           <div>
-            <div className="px-5 pt-2.5 flex justify-end">
+            <div className="px-5 pt-2.5 flex justify-end gap-2">
+              <ExcelImportExport vacancies={vacancies} onImport={(rows) => bulkImportMut.mutate(rows)} />
               {userRole !== 'view_only' && (
                 <button onClick={() => { setEditVacancy(null); setVacancyModal(true); }} className="px-3 py-1.5 text-xs font-semibold bg-primary text-primary-foreground rounded-md hover:opacity-90">
                   + Add Vacancy
@@ -204,7 +231,7 @@ export default function Index() {
               )}
             </div>
             <VacancyList
-              vacancies={vacancies}
+              vacancies={filteredVacancies}
               activeCategory={activeCategory}
               activeType={activeType}
               userRole={userRole}
@@ -220,6 +247,7 @@ export default function Index() {
         {view === 'join' && <JoiningTracker joinings={joinings} />}
         {view === 'req' && <HODRequests requisitions={requisitions} onAdd={(r) => createReqMut.mutate(r)} onApprove={handleApproveReq} onReject={handleRejectReq} userRole={userRole} />}
         {view === 'pipe' && <PipelineView vacancies={vacancies} />}
+        {view === 'onb' && <OnboardingView joinings={joinings} />}
         {view === 'log' && <ActivityLogView logs={logs} />}
       </div>
 
@@ -228,6 +256,7 @@ export default function Index() {
       <JoinModal open={joinModal} onClose={() => { setJoinModal(false); setJoinVacancy(null); }} onSave={handleJoinSave} vacancy={joinVacancy} />
       <ResignModal open={resignModal} onClose={() => { setResignModal(false); setResignVacancy(null); }} onSave={handleResignSave} vacancy={resignVacancy} />
       <PipelineModal open={pipeModal} onClose={() => { setPipeModal(false); setPipeVacancy(null); }} onSave={handlePipelineSave} vacancy={pipeVacancy} />
+      <ReportModal open={reportModal} onClose={() => setReportModal(false)} vacancies={vacancies} joinings={joinings} />
     </div>
   );
 }
