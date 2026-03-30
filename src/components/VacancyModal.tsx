@@ -16,7 +16,7 @@ export default function VacancyModal({ open, onClose, onSave, vacancy, existingI
     vacancy_id: '', job_type: 'NTS', sub_category: 'NTS-Admin',
     block: '', location: '', position: '', department: '',
     required_count: 1, filled_count: 0, status: 'Need to Hire' as string,
-    remarks: '', requestor: '', grade: '', location_val: ''
+    remarks: '', requestor: '', grade: ''
   });
 
   useEffect(() => {
