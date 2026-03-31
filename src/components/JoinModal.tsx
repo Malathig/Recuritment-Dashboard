@@ -12,7 +12,7 @@ interface JoinModalProps {
 export default function JoinModal({ open, onClose, onSave, vacancy }: JoinModalProps) {
   const [form, setForm] = useState({
     name: '', date: '', college: 'SSE', joining_status: 'New',
-    emp_id: '', bio_id: '', qualification: '', address: '', remarks: ''
+    emp_id: '', bio_id: '', qualification: '', address: '', remarks: '', referred_by: ''
   });
 
   const handleSave = () => {
@@ -24,7 +24,7 @@ export default function JoinModal({ open, onClose, onSave, vacancy }: JoinModalP
       department: vacancy?.department,
       job_type: vacancy?.job_type,
     });
-    setForm({ name: '', date: '', college: 'SSE', joining_status: 'New', emp_id: '', bio_id: '', qualification: '', address: '', remarks: '' });
+    setForm({ name: '', date: '', college: 'SSE', joining_status: 'New', emp_id: '', bio_id: '', qualification: '', address: '', remarks: '', referred_by: '' });
   };
 
   if (!open || !vacancy) return null;
@@ -85,6 +85,10 @@ export default function JoinModal({ open, onClose, onSave, vacancy }: JoinModalP
                 className="w-full border border-input rounded-md px-2 py-2 text-sm outline-none focus:border-primary bg-card" />
             </Field>
           </div>
+          <Field label="Referred / Called By (Faculty Name)">
+            <input value={form.referred_by} onChange={e => setForm(f => ({ ...f, referred_by: e.target.value }))} placeholder="e.g. Dr. Kumar, Prof. Ravi"
+              className="w-full border border-input rounded-md px-2 py-2 text-sm outline-none focus:border-primary bg-card" />
+          </Field>
           <Field label="Remarks (optional)">
             <input value={form.remarks} onChange={e => setForm(f => ({ ...f, remarks: e.target.value }))} placeholder="e.g. Lateral entry"
               className="w-full border border-input rounded-md px-2 py-2 text-sm outline-none focus:border-primary bg-card" />

@@ -79,6 +79,7 @@ export type Database = {
           onboarding: Json | null
           position: string | null
           qualification: string | null
+          referred_by: string | null
           remarks: string | null
           updated_at: string
           vacancy_id: string | null
@@ -99,6 +100,7 @@ export type Database = {
           onboarding?: Json | null
           position?: string | null
           qualification?: string | null
+          referred_by?: string | null
           remarks?: string | null
           updated_at?: string
           vacancy_id?: string | null
@@ -119,6 +121,7 @@ export type Database = {
           onboarding?: Json | null
           position?: string | null
           qualification?: string | null
+          referred_by?: string | null
           remarks?: string | null
           updated_at?: string
           vacancy_id?: string | null

@@ -21,6 +21,8 @@ import ActivityLogView from '@/components/ActivityLogView';
 import DepartmentView from '@/components/DepartmentView';
 import OnboardingView from '@/components/OnboardingView';
 import ExcelImportExport from '@/components/ExcelImportExport';
+import ExecutiveSummary from '@/components/ExecutiveSummary';
+import FacultyTracker from '@/components/FacultyTracker';
 import {
   fetchVacancies, createVacancy, updateVacancy, deleteVacancy,
   fetchJoinings, createJoining,
@@ -29,7 +31,7 @@ import {
   type Vacancy, type Requisition, type VacancyInsert
 } from '@/lib/api';
 
-type ViewType = 'dash' | 'list' | 'dept' | 'log' | 'join' | 'req' | 'pipe' | 'onb';
+type ViewType = 'dash' | 'exec' | 'list' | 'dept' | 'log' | 'join' | 'req' | 'pipe' | 'onb' | 'faculty';
 
 export default function Index() {
   const { profile, userRole } = useAuth();
@@ -190,10 +192,12 @@ export default function Index() {
     : vacancies;
 
   const views: { key: ViewType; label: string; show?: boolean }[] = [
-    { key: 'dash', label: 'Director Dashboard' },
+    { key: 'dash', label: 'Dashboard' },
+    { key: 'exec', label: '📊 Executive Report' },
     { key: 'list', label: 'Vacancy List' },
     { key: 'dept', label: 'By Department' },
     { key: 'join', label: 'Joining Tracker' },
+    { key: 'faculty', label: '👥 Faculty Tracker' },
     { key: 'req', label: 'HOD Requests' },
     { key: 'pipe', label: 'Pipeline' },
     { key: 'onb', label: 'Onboarding' },
@@ -220,6 +224,7 @@ export default function Index() {
       {/* View Content */}
       <div className="border-t border-border">
         {view === 'dash' && <DashboardView vacancies={vacancies} />}
+        {view === 'exec' && <ExecutiveSummary vacancies={vacancies} joinings={joinings} />}
         {view === 'list' && (
           <div>
             <div className="px-5 pt-2.5 flex justify-end gap-2">
@@ -248,6 +253,7 @@ export default function Index() {
         {view === 'req' && <HODRequests requisitions={requisitions} onAdd={(r) => createReqMut.mutate(r)} onApprove={handleApproveReq} onReject={handleRejectReq} userRole={userRole} />}
         {view === 'pipe' && <PipelineView vacancies={vacancies} />}
         {view === 'onb' && <OnboardingView joinings={joinings} />}
+        {view === 'faculty' && <FacultyTracker joinings={joinings} vacancies={vacancies} />}
         {view === 'log' && <ActivityLogView logs={logs} />}
       </div>
 
