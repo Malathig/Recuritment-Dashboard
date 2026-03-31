@@ -253,6 +253,7 @@ export default function Index() {
         {view === 'req' && <HODRequests requisitions={requisitions} onAdd={(r) => createReqMut.mutate(r)} onApprove={handleApproveReq} onReject={handleRejectReq} userRole={userRole} />}
         {view === 'pipe' && <PipelineView vacancies={vacancies} />}
         {view === 'onb' && <OnboardingView joinings={joinings} />}
+        {view === 'faculty' && <FacultyTracker joinings={joinings} vacancies={vacancies} />}
         {view === 'log' && <ActivityLogView logs={logs} />}
       </div>
 

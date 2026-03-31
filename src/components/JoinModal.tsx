@@ -85,6 +85,10 @@ export default function JoinModal({ open, onClose, onSave, vacancy }: JoinModalP
                 className="w-full border border-input rounded-md px-2 py-2 text-sm outline-none focus:border-primary bg-card" />
             </Field>
           </div>
+          <Field label="Referred / Called By (Faculty Name)">
+            <input value={form.referred_by} onChange={e => setForm(f => ({ ...f, referred_by: e.target.value }))} placeholder="e.g. Dr. Kumar, Prof. Ravi"
+              className="w-full border border-input rounded-md px-2 py-2 text-sm outline-none focus:border-primary bg-card" />
+          </Field>
           <Field label="Remarks (optional)">
             <input value={form.remarks} onChange={e => setForm(f => ({ ...f, remarks: e.target.value }))} placeholder="e.g. Lateral entry"
               className="w-full border border-input rounded-md px-2 py-2 text-sm outline-none focus:border-primary bg-card" />
