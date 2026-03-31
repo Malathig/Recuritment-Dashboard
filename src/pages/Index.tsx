@@ -192,10 +192,12 @@ export default function Index() {
     : vacancies;
 
   const views: { key: ViewType; label: string; show?: boolean }[] = [
-    { key: 'dash', label: 'Director Dashboard' },
+    { key: 'dash', label: 'Dashboard' },
+    { key: 'exec', label: '📊 Executive Report' },
     { key: 'list', label: 'Vacancy List' },
     { key: 'dept', label: 'By Department' },
     { key: 'join', label: 'Joining Tracker' },
+    { key: 'faculty', label: '👥 Faculty Tracker' },
     { key: 'req', label: 'HOD Requests' },
     { key: 'pipe', label: 'Pipeline' },
     { key: 'onb', label: 'Onboarding' },
