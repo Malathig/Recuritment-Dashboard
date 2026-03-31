@@ -21,6 +21,8 @@ import ActivityLogView from '@/components/ActivityLogView';
 import DepartmentView from '@/components/DepartmentView';
 import OnboardingView from '@/components/OnboardingView';
 import ExcelImportExport from '@/components/ExcelImportExport';
+import ExecutiveSummary from '@/components/ExecutiveSummary';
+import FacultyTracker from '@/components/FacultyTracker';
 import {
   fetchVacancies, createVacancy, updateVacancy, deleteVacancy,
   fetchJoinings, createJoining,
