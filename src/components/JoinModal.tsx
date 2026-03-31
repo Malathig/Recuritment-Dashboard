@@ -24,7 +24,7 @@ export default function JoinModal({ open, onClose, onSave, vacancy }: JoinModalP
       department: vacancy?.department,
       job_type: vacancy?.job_type,
     });
-    setForm({ name: '', date: '', college: 'SSE', joining_status: 'New', emp_id: '', bio_id: '', qualification: '', address: '', remarks: '' });
+    setForm({ name: '', date: '', college: 'SSE', joining_status: 'New', emp_id: '', bio_id: '', qualification: '', address: '', remarks: '', referred_by: '' });
   };
 
   if (!open || !vacancy) return null;
