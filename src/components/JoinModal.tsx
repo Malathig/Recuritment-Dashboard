@@ -12,7 +12,7 @@ interface JoinModalProps {
 export default function JoinModal({ open, onClose, onSave, vacancy }: JoinModalProps) {
   const [form, setForm] = useState({
     name: '', date: '', college: 'SSE', joining_status: 'New',
-    emp_id: '', bio_id: '', qualification: '', address: '', remarks: ''
+    emp_id: '', bio_id: '', qualification: '', address: '', remarks: '', referred_by: ''
   });
 
   const handleSave = () => {
