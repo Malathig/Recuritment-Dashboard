@@ -1,0 +1,1 @@
+ALTER TABLE public.joinings ADD COLUMN IF NOT EXISTS referred_by text DEFAULT '';
