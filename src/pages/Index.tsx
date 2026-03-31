@@ -224,6 +224,7 @@ export default function Index() {
       {/* View Content */}
       <div className="border-t border-border">
         {view === 'dash' && <DashboardView vacancies={vacancies} />}
+        {view === 'exec' && <ExecutiveSummary vacancies={vacancies} joinings={joinings} />}
         {view === 'list' && (
           <div>
             <div className="px-5 pt-2.5 flex justify-end gap-2">
