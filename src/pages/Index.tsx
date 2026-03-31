@@ -31,7 +31,7 @@ import {
   type Vacancy, type Requisition, type VacancyInsert
 } from '@/lib/api';
 
-type ViewType = 'dash' | 'list' | 'dept' | 'log' | 'join' | 'req' | 'pipe' | 'onb';
+type ViewType = 'dash' | 'exec' | 'list' | 'dept' | 'log' | 'join' | 'req' | 'pipe' | 'onb' | 'faculty';
 
 export default function Index() {
   const { profile, userRole } = useAuth();
