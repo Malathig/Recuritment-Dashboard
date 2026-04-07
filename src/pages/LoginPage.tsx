@@ -78,9 +78,20 @@ export default function LoginPage() {
             <p className="text-xs text-muted-foreground">
               Check your inbox at <b>{email}</b> and click the link to reset your password.
             </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-md px-3 py-2.5 text-[11px] text-blue-800 text-left space-y-1">
+              <p>• Didn't receive it? Check your <b>spam / junk folder</b>.</p>
+              <p>• The link expires in <b>1 hour</b> — request a new one if needed.</p>
+              <p>• Still stuck? Contact your <b>HR administrator</b>.</p>
+            </div>
+            <button
+              onClick={() => reset('forgot')}
+              className="w-full border border-primary text-primary rounded-lg py-2.5 text-sm font-semibold hover:bg-primary/5 transition"
+            >
+              Resend Reset Link
+            </button>
             <button
               onClick={() => reset('login')}
-              className="w-full bg-primary text-primary-foreground rounded-lg py-3 text-sm font-bold hover:opacity-90 transition mt-2"
+              className="w-full bg-primary text-primary-foreground rounded-lg py-3 text-sm font-bold hover:opacity-90 transition"
             >
               Back to Login
             </button>
@@ -91,8 +102,13 @@ export default function LoginPage() {
         {view === 'forgot' && (
           <form onSubmit={handleForgotPassword} className="space-y-4">
             <p className="text-xs text-muted-foreground text-center">
-              Enter your email and we'll send you a password reset link.
+              Enter your registered email and we'll send you a password reset link.
             </p>
+            <div className="bg-amber-50 border border-amber-200 rounded-md px-3 py-2.5 text-[11px] text-amber-800 space-y-1">
+              <p>• Check your <b>spam / junk folder</b> if the email doesn't arrive within 2 minutes.</p>
+              <p>• Use the email your <b>HR admin registered</b> for your account.</p>
+              <p>• If you don't know your email, contact your <b>HR administrator</b> directly.</p>
+            </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-muted-foreground uppercase">Email</label>
               <input

@@ -1,7 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import AppHeader from '@/components/AppHeader';
 import StatsCards from '@/components/StatsCards';
 import CategoryBar from '@/components/CategoryBar';
@@ -60,6 +61,34 @@ export default function Index() {
   const { data: logs = [] } = useQuery({ queryKey: ['activity_log'], queryFn: fetchActivityLog });
 
   const userName = profile?.name || 'User';
+  const userNameRef = useRef(userName);
+  useEffect(() => { userNameRef.current = userName; }, [userName]);
+
+  // Realtime: detect parallel updates by other users and auto-refresh
+  useEffect(() => {
+    const channel = supabase
+      .channel('realtime-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'vacancies' }, (payload) => {
+        const updatedBy = (payload.new as any)?.updated_by;
+        if (updatedBy && updatedBy !== userNameRef.current) {
+          qc.invalidateQueries({ queryKey: ['vacancies'] });
+          const action = payload.eventType === 'INSERT' ? 'added a vacancy' : payload.eventType === 'DELETE' ? 'deleted a vacancy' : 'updated a vacancy';
+          toast.info(`${updatedBy} ${action}. Data refreshed.`, { duration: 4000 });
+        }
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'joinings' }, (payload) => {
+        qc.invalidateQueries({ queryKey: ['joinings'] });
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'requisitions' }, (payload) => {
+        qc.invalidateQueries({ queryKey: ['requisitions'] });
+      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'activity_log' }, () => {
+        qc.invalidateQueries({ queryKey: ['activity_log'] });
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [qc]);
 
   const log = useCallback((action: string, targetId: string, details: string) => {
     addActivityLog({ user_name: userName, action, target_id: targetId, details });
