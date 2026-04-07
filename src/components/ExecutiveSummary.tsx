@@ -1,7 +1,13 @@
-import React from 'react';
 import * as XLSX from 'xlsx';
 import { toast } from 'sonner';
 import type { Vacancy, Joining } from '@/lib/api';
+import type { CandidateBreakdown } from './PipelineModal';
+
+function sumDisqualified(v: Vacancy): number {
+  const raw = v.candidate_breakdown as Partial<CandidateBreakdown> | null;
+  if (!raw) return 0;
+  return Object.values(raw).reduce((s: number, n) => s + (n as number || 0), 0);
+}
 
 interface ExecutiveSummaryProps {
   vacancies: Vacancy[];
@@ -30,6 +36,8 @@ export default function ExecutiveSummary({ vacancies, joinings }: ExecutiveSumma
 
   // Pipeline funnel
   const totApplied = vacancies.reduce((s, v) => s + (v.applied || 0), 0);
+  const totDisqualified = vacancies.reduce((s, v) => s + sumDisqualified(v), 0);
+  const totValid = Math.max(0, totApplied - totDisqualified);
   const totShort = vacancies.reduce((s, v) => s + (v.shortlisted || 0), 0);
   const totInter = vacancies.reduce((s, v) => s + (v.interviewed || 0), 0);
   const totSel = vacancies.reduce((s, v) => s + (v.selected || 0), 0);
@@ -57,7 +65,9 @@ export default function ExecutiveSummary({ vacancies, joinings }: ExecutiveSumma
 
   const funnelStages = [
     { label: 'Applied', value: totApplied, color: 'bg-primary' },
-    { label: 'Shortlisted', value: totShort, color: 'bg-info' },
+    { label: 'Disqualified (Not Valid)', value: totDisqualified, color: 'bg-destructive' },
+    { label: 'Valid Candidates', value: totValid, color: 'bg-info' },
+    { label: 'Shortlisted', value: totShort, color: 'bg-sky-400' },
     { label: 'Interviewed', value: totInter, color: 'bg-accent' },
     { label: 'Selected', value: totSel, color: 'bg-warning' },
     { label: 'Offer Made', value: totOfferMade, color: 'bg-orange-400' },
@@ -85,7 +95,7 @@ export default function ExecutiveSummary({ vacancies, joinings }: ExecutiveSumma
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(summaryData), 'Executive Summary');
 
     // Sheet 2: Pipeline Funnel
-    const funnelData = funnelStages.map(s => ({ Stage: s.label, Count: s.value, 'Conversion %': totApplied > 0 ? `${Math.round((s.value / totApplied) * 100)}%` : '0%' }));
+    const funnelData = funnelStages.map(s => ({ Stage: s.label, Count: s.value, 'Of Applied %': totApplied > 0 ? `${Math.round((s.value / totApplied) * 100)}%` : '0%' }));
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(funnelData), 'Pipeline Funnel');
 
     // Sheet 3: TAT by Department

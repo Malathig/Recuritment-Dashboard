@@ -169,12 +169,14 @@ export type Database = {
           count: number
           created_at: string
           department: string
+          hod_email: string | null
           hod_name: string
           id: string
           job_type: string | null
           justification: string | null
           position: string
           req_id: string
+          source: string | null
           status: string
           sub_category: string | null
           vacancy_id: string | null
@@ -186,12 +188,14 @@ export type Database = {
           count?: number
           created_at?: string
           department: string
+          hod_email?: string | null
           hod_name: string
           id?: string
           job_type?: string | null
           justification?: string | null
           position: string
           req_id: string
+          source?: string | null
           status?: string
           sub_category?: string | null
           vacancy_id?: string | null
@@ -203,12 +207,14 @@ export type Database = {
           count?: number
           created_at?: string
           department?: string
+          hod_email?: string | null
           hod_name?: string
           id?: string
           job_type?: string | null
           justification?: string | null
           position?: string
           req_id?: string
+          source?: string | null
           status?: string
           sub_category?: string | null
           vacancy_id?: string | null
@@ -239,6 +245,7 @@ export type Database = {
           ad_platform: string | null
           applied: number | null
           block: string | null
+          candidate_breakdown: Json | null
           created_at: string
           department: string
           filled_count: number
@@ -268,6 +275,7 @@ export type Database = {
           ad_platform?: string | null
           applied?: number | null
           block?: string | null
+          candidate_breakdown?: Json | null
           created_at?: string
           department: string
           filled_count?: number
@@ -297,6 +305,7 @@ export type Database = {
           ad_platform?: string | null
           applied?: number | null
           block?: string | null
+          candidate_breakdown?: Json | null
           created_at?: string
           department?: string
           filled_count?: number
